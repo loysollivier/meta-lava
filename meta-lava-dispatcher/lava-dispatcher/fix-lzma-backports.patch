@@ -1,0 +1,42 @@
+From f7c195b3f821014c2e4522c3e0cfff332680e529 Mon Sep 17 00:00:00 2001
+From: Loys Ollivier <lollivier@baylibre.com>
+Date: Tue, 14 Nov 2017 10:57:55 +0100
+Subject: [PATCH] lava/dispatcher: lava-dispatcher-slave fix lzma
+
+The previous version tries to import lzma but the package is available
+through the lzma-backports python package.
+
+To fix this import from backports.lzma
+
+Signed-off-by: Loys Ollivier <lollivier@baylibre.com>
+---
+ lava/dispatcher/lava-dispatcher-slave | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/lava/dispatcher/lava-dispatcher-slave b/lava/dispatcher/lava-dispatcher-slave
+index c6d457359804..d5e372e590cd 100755
+--- a/lava/dispatcher/lava-dispatcher-slave
++++ b/lava/dispatcher/lava-dispatcher-slave
+@@ -35,7 +35,7 @@ import atexit
+ import errno
+ import fcntl
+ import logging
+-import lzma
++import backports.lzma as lzma
+ import os
+ import re
+ import shutil
+@@ -50,10 +50,7 @@ import zmq
+ import zmq.auth
+ from zmq.utils.strtypes import b, u
+ 
+-if sys.version >= '3':
+-    LZMAError = lzma.LZMAError
+-else:
+-    LZMAError = lzma.error
++LZMAError = lzma.LZMAError
+ 
+ from lava_dispatcher.job import ZMQConfig
+ 
+-- 
+2.7.4
